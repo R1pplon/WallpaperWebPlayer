@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>视频播放</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #000;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+
+      /* 视频容器 */
+      video {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background-color: #000;
+        display: block;
+      }
+
+      /* ===== 手机端全屏播放优化 ===== */
+      @media (max-width: 768px) {
+        html,
+        body {
+          height: 100dvh; /* 使用动态视口单位，避免被地址栏遮挡 */
+          background-color: #000;
+        }
+
+        video {
+          width: 100vw;
+          height: 100dvh;
+          object-fit: contain;
+          border: none;
+          outline: none;
+        }
+      }
+
+      /* ===== 横屏时自动充满屏幕 ===== */
+      @media screen and (orientation: landscape) {
+        video {
+          object-fit: cover;
+          height: 100vh;
+          width: 100vw;
+        }
+      }
+
+      /* 防止iOS Safari全屏时背景闪白 */
+      @supports (-webkit-touch-callout: none) {
+        body {
+          background-color: #000;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <video controls autoplay>
+      <source src="/videos/{{ video_path }}" type="video/mp4" />
+      您的浏览器不支持HTML5视频播放。
+    </video>
+  </body>
+</html>
