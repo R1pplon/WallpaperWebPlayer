@@ -20,7 +20,7 @@
 1. 修改 `app.py` 中的视频目录路径为你的 Wallpaper Engine 内容目录
 
    ```python
-   VIDEO_DIR = "C:\\SteamLibrary\\steamapps\\workshop\\content\\431960"
+   WALLPAPER_DIR = "C:/Program Files (x86)/steam/steamapps/workshop/content/431960/"
    ```
 
 2. 启动程序
