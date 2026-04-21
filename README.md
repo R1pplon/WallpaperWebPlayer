@@ -1,4 +1,4 @@
-# 🎬 简易本地视频站
+# 🎬 WallpaperWebPlayer
 
 一个基于 **Flask** 的轻量级本地视频浏览网站，
 用于在 **手机浏览器中观看 Wallpaper Engine 下载的壁纸视频文件**。
