@@ -17,25 +17,19 @@
 
 ## ⚙️ 使用方法
 
-1. 安装依赖
-
-   ```bash
-   pip install flask
-   ```
-
-2. 修改 `app.py` 中的视频目录路径为你的 Wallpaper Engine 内容目录
+1. 修改 `app.py` 中的视频目录路径为你的 Wallpaper Engine 内容目录
 
    ```python
    VIDEO_DIR = "C:\\SteamLibrary\\steamapps\\workshop\\content\\431960"
    ```
 
-3. 启动程序
+2. 启动程序
 
    ```bash
    python app.py
    ```
 
-4. 在手机或电脑浏览器访问
+3. 在手机或电脑浏览器访问
 
    ```
    http://localhost:58763
