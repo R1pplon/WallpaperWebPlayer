@@ -6,12 +6,12 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     # 视频文件根目录
-    VIDEO_DIR = "C:\\SteamLibrary\\steamapps\\workshop\\content\\431960"
+    WALLPAPER_DIR = "C:/Program Files (x86)/steam/steamapps/workshop/content/431960/"
 
     # --- 数据库配置 ---
     SQLITE_DB_PATH = os.path.join(BASE_DIR, "videos.db")
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + SQLITE_DB_PATH
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_ECHO = True
+    # SQLALCHEMY_ECHO = True
 
     DEBUG = True

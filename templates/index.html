@@ -157,12 +157,12 @@
       <div class="videos-grid">
         {% for video in videos %}
         <div class="video-item" data-title="{{ video.title|e }}">
-          <a href="/video/{{ video.video_id }}/{{ video.name }}/">
+          <a href="/video/{{ video.video_id }}/{{ video.file }}/">
             {% if video.preview %}
             <img
               class="video-preview"
-              src="/preview/{{ video.video_id }}/preview.{{ video.preview }}"
-              alt="{{ video.name }}"
+              src="/preview/{{ video.video_id }}/{{ video.preview }}"
+              alt="{{ video.file }}"
             />
             {% else %}
             <img
