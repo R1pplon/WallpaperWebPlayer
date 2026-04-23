@@ -5,11 +5,16 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
+
+    BASE_DIR = BASE_DIR
     # 壁纸文件目录
-    WALLPAPER_DIR = "/run/media/r1pple/Win10Pro/Program Files (x86)/steam/steamapps/workshop/content/431960/"
+    WALLPAPER_DIR = "C:/Program Files (x86)/steam/steamapps/workshop/content/431960/"
+
+    # 本地场景图片目录
+    PICTURE_DIR = os.path.join(BASE_DIR, "data/scenes")
 
     # --- 数据库配置 ---
-    SQLITE_DB_PATH = os.path.join(BASE_DIR, "videos.db")
+    SQLITE_DB_PATH = os.path.join(BASE_DIR, "data/data.db")
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + SQLITE_DB_PATH
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     # SQLALCHEMY_ECHO = True

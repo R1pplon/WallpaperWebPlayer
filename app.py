@@ -28,7 +28,7 @@ def run_startup_checks(app):
     if not dao.get_all_videos():
         logger.info("检测到数据库为空，执行首次扫描...")
         added_count, _ = (
-            scanner_service.video_scan_and_sync()
+            scanner_service.all_scan_and_sync()
         )
         if added_count == 0:
             logger.error("未找到壁纸信息，请检查配置后重试。")

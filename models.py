@@ -6,7 +6,21 @@ db = SQLAlchemy()
 class Video(db.Model):
     __tablename__ = "videos"
 
-    video_id = db.Column(db.String(10), primary_key=True)  # 10位数字，唯一主键
-    file = db.Column(db.String(255), nullable=False)
+    video_id = db.Column(db.String(20), primary_key=True)
     title = db.Column(db.String(500), default="")
     preview = db.Column(db.String(100), default="")
+    file = db.Column(db.String(255), nullable=False)
+
+class Scene(db.Model):
+    __tablename__ = "scenes"
+
+    scene_id = db.Column(db.String(20), primary_key=True)
+    title = db.Column(db.String(500), default="")
+    preview = db.Column(db.String(100), default="")
+    images = db.relationship("SceneImage", backref="scene", lazy=True)
+
+class SceneImage(db.Model):
+    __tablename__ = "scene_images"
+
+    scene_id = db.Column(db.String(20), db.ForeignKey('scenes.scene_id'), primary_key=True)
+    image_name = db.Column(db.String(100), primary_key=True)
