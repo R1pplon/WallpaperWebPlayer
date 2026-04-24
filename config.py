@@ -10,8 +10,8 @@ class Config:
     # 壁纸文件目录
     WALLPAPER_DIR = "C:/Program Files (x86)/steam/steamapps/workshop/content/431960/"
 
-    # 本地场景图片目录
-    PICTURE_DIR = os.path.join(BASE_DIR, "data/scenes")
+    # 本地场景图片缓存目录
+    PICTURE_TMP_DIR = os.path.join(BASE_DIR, "temp/scenes")
 
     # --- 数据库配置 ---
     SQLITE_DB_PATH = os.path.join(BASE_DIR, "data/data.db")

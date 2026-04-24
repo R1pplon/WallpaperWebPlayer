@@ -1,4 +1,4 @@
-from models import db, Video, Scene, SceneImage
+from models import db, Video, Scene
 import logging
 from config import Config
 import subprocess
@@ -87,45 +87,21 @@ def refresh_scenes(scene_dicts):
         for item in scene_dicts:
             sid = item["scene_id"]
             new_scenes.add(sid)
-            image_list = item.get("image_list", [])
-            output_dir = os.path.join(Config.BASE_DIR, 'data', 'scenes', sid)
-
-            # 对于合法数据scene_dicts，如果不存在本地图片，执行RePKG
-            if not os.path.exists(output_dir):
-                image_list = scene2picture(sid)
 
             # 处理新增记录
             if sid not in existing_scenes:
-                try:
-                    image_list = [f for f in os.listdir(output_dir) if os.path.isfile(os.path.join(output_dir, f))]
-                except OSError:
-                    image_list = []
-
                 s = Scene(
                     scene_id=sid,
                     title=item.get("title", ""),
                     preview=item.get("preview", ""),
                 )
-                for name in image_list:
-                    s.images.append(SceneImage(scene_id=sid, image_name=name))
                 db.session.add(s)
                 added_ids.append(sid)
 
         # 删除扫描中已不存在的记录
         deleted_ids = set(existing_scenes.keys()) - new_scenes
         for sid in deleted_ids:
-            s = existing_scenes[sid]
-            for img in s.images:
-                db.session.delete(img)
-            db.session.delete(s)
-            # 同步删除本地图片文件
-            output_dir = os.path.join(Config.BASE_DIR, 'data', 'scenes', sid)
-            if os.path.exists(output_dir):
-                try:
-                    shutil.rmtree(output_dir)
-                    logger.info(f"已清理本地场景目录: {output_dir}")
-                except Exception as e:
-                    logger.error(f"删除本地图片目录失败 {output_dir}: {e}")
+            db.session.delete(existing_scenes[sid])
 
         db.session.commit()
 
@@ -141,15 +117,16 @@ def refresh_scenes(scene_dicts):
     return len(added_ids), len(deleted_ids)
 
 
-def scene2picture(scene_id):
+def scene2picture_temp(scene_id):
     r"""
     将场景转换为图片。
     返回图片路径。
+    步骤1：先清空temp路径，再将文件写入temp目录
 
-    步骤1：工具提取
-    命令：`..\..\tools\RePKG.exe extract -e tex -s -o ..\..\data\scenes\<scene_id> "C:\Program Files (x86)\steam\steamapps\workshop\content\431960\<scene_id>\scene.pkg"`
+    步骤2：工具提取
+    命令：`..\..\tools\RePKG.exe extract -e tex -s -o ..\..\temp\scenes\<scene_id> "C:\Program Files (x86)\steam\steamapps\workshop\content\431960\<scene_id>\scene.pkg"`
     步骤2：删除无用文件
-    在\data\scenes\<scene_id>目录下删除['.tex','.tex-json']后缀的文件
+    在\temp\scenes\<scene_id>目录下删除['.tex','.tex-json']后缀的文件
     步骤3：统计
     返回剩下的文件名列表
     """
@@ -161,7 +138,13 @@ def scene2picture(scene_id):
     # 构建各路径
     repkg_exe = os.path.join(base_dir, 'tools', 'RePKG', 'RePKG.exe')
     workshop_scene_path = os.path.join(Config.WALLPAPER_DIR, scene_id, 'scene.pkg')
-    output_dir = os.path.join(base_dir, 'data', 'scenes', scene_id)
+    temp_dir = os.path.join(base_dir, 'temp', 'scenes')
+    output_dir = os.path.join(temp_dir, scene_id)
+
+    # 清空输出目录
+    if os.path.exists(temp_dir):
+        shutil.rmtree(temp_dir)
+        logger.info("清空输出目录")
     
     # 步骤1：提取纹理文件
     cmd = [
@@ -190,7 +173,7 @@ def scene2picture(scene_id):
             except OSError as e:
                 logger.error(f"删除文件失败 {file_path}: {e}")
     
-    # 步骤3：获取剩余图片文件名（所有非目录文件）
+    # 步骤3：获取剩余图片文件名
     try:
         files = [f for f in os.listdir(output_dir) 
                  if os.path.isfile(os.path.join(output_dir, f))]
@@ -198,7 +181,5 @@ def scene2picture(scene_id):
         logger.error(f"输出目录不存在: {output_dir}")
         return []
     
-    # 返回逗号分隔的文件名
+    # 返回文件名列表
     return files
-    
-

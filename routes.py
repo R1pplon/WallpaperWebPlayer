@@ -7,7 +7,7 @@ from services import scanner_service
 bp = Blueprint("main", __name__)
 
 
-@bp.route("/videos")
+@bp.route("/")
 def videos():
     """视频列表页"""
     videos = dao.get_all_videos()
@@ -50,11 +50,11 @@ def scenes():
 @bp.route("/scene/<id>")
 def scenes_picture_list(id):
     """根据场景ID获取图片列表"""
-    picture_list = dao.get_pictures_by_scene_id(id)
+    picture_list = dao.scene2picture_temp(id)
     return render_template("scene.html", id=id, pictures=picture_list)
 
 @bp.route("/scenes/<id>/<filename>")
 def scenes_picture(id, filename):
     """提供场景图片"""
-    PICTURE_DIR = current_app.config["PICTURE_DIR"]
-    return send_from_directory(os.path.join(PICTURE_DIR, id), filename)
+    PICTURE_TMP_DIR = current_app.config["PICTURE_TMP_DIR"]
+    return send_from_directory(os.path.join(PICTURE_TMP_DIR, id), filename)

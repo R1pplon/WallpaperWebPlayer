@@ -5,3 +5,4 @@ videos.db
 test/
 test*
 data/
+temp/
